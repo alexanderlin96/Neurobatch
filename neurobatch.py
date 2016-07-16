@@ -10,24 +10,30 @@ import json
 import sys
 import argparse
 import os
- 
+
+# dictionary to store all coordinates and their download links 
 mydict={}
+
+# mutex lock to protect progress resource
 mutex = Lock()
 total = 0
 progress = 0
-progress_x = 0
 collecting_info = True
 
-def is_valid_file(parser, arg):
+# checks if supplied file exists
+def is_valid_csv_file(parser, arg):
   if not os.path.exists(arg):
     parser.error("The file %s does not exist!" % arg)
+  elif not arg.endswith('.csv'):
+  	parser.error("Not a csv file!")
   return arg
 
 def directory_exists(parser, arg):
 	if os.path.exists(arg):
 		parser.error("The output file name is already taken: %s" % arg)
 	return arg
- 
+
+# extracts the download links for the coordinates in the csv file
 def f(x):
 	global mydict
 	x_coor_raw = str(mydict[x][0])
@@ -36,23 +42,33 @@ def f(x):
 
 	# this path returns us a json which includes the download link
 	path = "http://neurosynth.org/locations/"+ x_coor_raw + "_" + y_coor_raw + "_" + z_coor_raw + "/images"
-	success = False
+
+	# download links are defaulted to empty strings
 	fc = ""
 	mc = ""
+
+	# download file until success
+	success = False
 	while(not success):
 		try: r1 = urllib.request.urlopen(path)
 		except urllib.error.URLError as e:
 			print(e.reason) 
 			continue;
+		# parse response json
 		parsed_json = json.loads(r1.read().decode());
+
+		# extract the download link
 		for y in parsed_json['data']:
 			if(y['name'] == 'Functional connectivity'):
-				fc = 'http://neurosynth.org'+y['download']+'/?.ni.gz'
+				fc = 'http://neurosynth.org'+y['download']+'/?.nii.gz'
 				# print(fc)
 			if(y['name'] == 'Meta-analytic coactivation'):
-				mc = 'http://neurosynth.org'+y['download']+'/?.ni.gz'
+				mc = 'http://neurosynth.org'+y['download']+'/?.nii.gz'
 		success = True
+
 	fields=[x_coor_raw,y_coor_raw,z_coor_raw,fc,mc]
+
+	# acquire editing permission to dictionary and update progress
 	mutex.acquire()
 	try:
 		global progress
@@ -66,31 +82,35 @@ def y(x, args):
 	x_coor_raw = str(mydict[x][0])
 	y_coor_raw = str(mydict[x][1])
 	z_coor_raw = str(mydict[x][2])
-	download_link = str(mydict[x][3])
+	fc_download_link = str(mydict[x][3])
+
+	# download file until success
 	success_inner = False
 	while(not success_inner):
 
+		# wait a random period of time between the bounds before downloading (perhaps to avoid IP ban)
 		wait_time = random.randint(args.bounds[0],args.bounds[1]);
-		# print('Waiting for: '+str(wait_time)+' seconds', end="", flush=False)
 		for i in range(wait_time):
 			print('.', end="",flush=False)
 			time.sleep(1)
-		# print('X: '+x_coor_raw.zfill(2)+' Y: '+y_coor_raw.zfill(2)+' Z: '+z_coor_raw.zfill(2))
-		# print('Download: '+download_link)
 
+		# sets up correct download directory
 		folder = ''
 		if(args.outputfolder != ''):
 			folder = args.outputfolder;
 
+		# full path of download file
 		filename = folder+x_coor_raw.zfill(2)+'_'+y_coor_raw.zfill(2)+'_'+z_coor_raw.zfill(2)+'.nii.gz'
-		# print("Saving to file: "+filename)
-		try: urllib.request.URLopener().retrieve(download_link, filename)
+		
+		# attempt to download the functional connectivity file
+		try: urllib.request.URLopener().retrieve(fc_download_link, filename)
 		except urllib.error.URLError as e:
 			print(e.reason)
 			continue; 
-		end = time.time();
+
 		success_inner = True;
-		# return 'X: '+x_coor_raw.zfill(2)+' Y: '+y_coor_raw.zfill(2)+' Z: '+z_coor_raw.zfill(2)+ ' done'
+
+		# update progress
 		mutex.acquire()
 		try:
 			global progress
@@ -123,76 +143,111 @@ def progress_bar():
 def main():
 	#parses command line arguments
 	parser = argparse.ArgumentParser(description="Batch Donwloader for http://neurosynth.org Functional Connectivity images")
-	parser.add_argument("-i", dest="inputcsv", required=True, help="csv file path", metavar="FILE", type=lambda x: is_valid_file(parser, x))
+	parser.add_argument("-i", dest="inputcsv", required=True, help="csv file path", metavar="FILE", type=lambda x: is_valid_csv_file(parser, x))
 	parser.add_argument("-o", dest="outputfolder", help="output folder path", metavar="FILE", type=lambda x: directory_exists(parser, x))
-	parser.add_argument("-a", dest="workers", required=False, help="multithread mode", type=int);
-	parser.add_argument("-w", dest="bounds", nargs=2, metavar="SEC", required=True, type=int, help="random wait time lower and upper bounds inclusive");
+	parser.add_argument("-s", action="store_true", help="set flag to skip link collection")
+	parser.add_argument("-a", dest="workers", required=False, help="multithread mode, if not set default: 1", type=int);
+	parser.add_argument("-w", dest="bounds", nargs=2, metavar="SEC", type=int, help="random wait time lower and upper bounds inclusive");
 	args = parser.parse_args()
 
 	global total
 	global progress
 	global collecting_info
 
+	# checks for correct flag sets
+	if(args.outputfolder is not None):
+		if(args.bounds[0] is None):
+			parser.error("-w needs to be set")
+
+	if(args.s):
+		if(args.outputfolder is None):
+			parser.error("-o needs to be set")
+		elif(args.bounds is None):
+			parser.error("-w needs to be set")
+
+	# get bounds
 	lowerbound = args.bounds[0]
 	upperbound = args.bounds[1]
 
+	# sets number of threads
 	workers = 1
 	if(args.workers is not 0 and args.workers is not None):
 		workers = args.workers
 
+	# open input csv 
 	f1 = open(args.inputcsv,'r')
-	f2 = open('tmp_'+args.inputcsv, 'a');
-
 	csv_reader = csv.reader(f1)
+
+	# checking for correctness and puts coordinates into a dictionary
 	for count, elem in enumerate(csv_reader):
+		try:
+		    is_x = int(elem[0])
+		    is_y = int(elem[1])
+		    is_z = int(elem[2])
+		except (IndexError, ValueError) as e:
+			parser.error("This csv file doesn't seem to be valid...")
+
+		if(not (is_x and is_y and is_z)):
+			parser.error("This csv file doesn't seem to be valid...")
 		total += 1
 		mydict[count] = elem
 	f1.close();
+
+	# error checking
+	if(total == 0):
+		parser.error("This csv file doesn't seem to be valid...")
+
 	print()	
 	print('Loaded coordinates into Memory')
 	print()
 
-	print('Collecting Download Links')
+	if(not args.s):
+		print('Collecting Download Links')
+		# open temporary file to save download links
+		f2 = open('tmp_'+args.inputcsv, 'a')
+		csv_writer = csv.writer(f2);
 
-	csv_writer = csv.writer(f2);
+		# start the progress bar
+		progress_bar()
 
-	progress_bar()
+		# download primary json files
+		with ThreadPoolExecutor(max_workers=workers) as executor:
+			futures = [executor.submit(f, key) for key in mydict.keys()]
+			for future in as_completed(futures):
+				if(future.exception() is not None):
+					print(future.exception());
+				else:
+					write_to_csv(csv_writer,future.result())
 
-	with ThreadPoolExecutor(max_workers=workers) as executor:
-		futures = [executor.submit(f, key) for key in mydict.keys()]
-		for future in as_completed(futures):
-			if(future.exception() is not None):
-				print(future.exception());
-			else:
-				write_to_csv(csv_writer,future.result())
+		sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
+		sys.stdout.flush()
 
-	sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
-	sys.stdout.flush()
+		# close the temp csv file
+		f2.close();
 
-	f1.close();
-	f2.close();
+		# delete the old csv file and replace it with the temp one with links
+		os.remove(args.inputcsv)
+		os.rename('tmp_'+args.inputcsv,args.inputcsv)
 
-	collecting_info = False;
-	print()
-	print('Done collecting download links')
-	print()
-	
-	# delete the old csv file and replace it with the new one with links
-	os.remove(args.inputcsv)
-	os.rename('tmp_'+args.inputcsv,args.inputcsv)
+		collecting_info = False;
+		print()
+		print('Done collecting download links')
+		print()
 
+	# if no output folder we just exit
 	if(args.outputfolder == None):
-		print(mydict)
 		quit()
 	elif(args.outputfolder != '' and args.outputfolder != None):
 		# makes the folder the files are going to be in
 		os.makedirs(args.outputfolder)
 
+	# reset settings and initiate file downloads
 	print('Initiating File Downloads with '+str(workers)+' worker(s)')
 	collecting_info = True
 	progress = 0
 	progress_bar()
 
+	# assign download task to each worker
 	with ThreadPoolExecutor(max_workers=workers) as executor:
 		futures = [executor.submit(y, key, args) for key in mydict.keys()]
 		for future in as_completed(futures):
