@@ -1,5 +1,5 @@
 # Neurobatch
-This Python3 script is meant to:
+This Python3 script is specific for [neurosynth](http://http://neurosynth.org/) and allows:
 
 1. Batch extract download links "Functional Connectivity"
 2. Batch extract download links "Meta-analytic Coactivation"
