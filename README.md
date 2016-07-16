@@ -7,7 +7,7 @@ This Python3 script is specific for [neurosynth](http://neurosynth.org/) and all
 ````
 usage: neurobatch.py [-h] -i FILE [-o FILE] [-s] [-a WORKERS] [-w SEC SEC]
 
-Batch Donwloader for http://neurosynth.org Functional Connectivity images
+Batch Downloader for http://neurosynth.org Functional Connectivity images
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -43,7 +43,7 @@ This usage only extracts download links and saves them in the input csv file. Th
 ````
 neurobatch.py -a 10 -i sample.csv -o output/ -w 2 6
 ````
-Setting the `-a` flag unleashes the power of multithreading for the batch download process. Downloads will now be handled with the set number of threads. The number of threads signifies how many files will be downloaded asynchronously. Note that each thread will have its own individual wait time. The `-w` does not guarantee non-overlapping download requests.
+Setting the `-a` flag unleashes the power of multithreading for the batch download process. Downloads will now be handled with the set number of threads. The number of threads signifies how many files will be downloaded asynchronously. Note that each thread will have its own individual wait time. The `-w` does not guarantee non-overlapping, sequential download requests.
 ````
 neurobatch.py -a 10 -s -i sample.csv -o output/ -w 2 6
 ````
