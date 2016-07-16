@@ -34,7 +34,7 @@ sample.csv
 ````
 neurobatch.py -i sample.csv -o output/ -w 2 6
 ````
-This is the most basic usage one thread will collect all download links and save them in the input csv (`sample.csv` in this case) and will attempt to download all "Functional Connectivity" files. The `-w` flag must be set when the `-o` flag is set to denote delay time between downloads. Set `-w 0 0` if no delay time is necessary.
+This is the most basic usage one thread will collect all download links and save them in the input csv (`sample.csv` in this case) and will attempt to download all "Functional Connectivity" files. The `-w` flag must be set when the `-o` flag is set to denote delay time between downloads. During file downloads, a random wait time between the two numbers inputted will be chosen. Set `-w 0 0` if no delay time is wanted
 ````
 neurobatch.py -i sample.csv
 ````
