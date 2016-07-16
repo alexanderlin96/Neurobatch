@@ -17,7 +17,7 @@ optional arguments:
   -a WORKERS  multithread mode, if not set default: 1
   -w SEC SEC  random wait time lower and upper bounds inclusive
 ````
-the usage of the flags are explained in the [Example Usage Section](#example-usage)
+the usage of the flags are explained in the [Example Usage](#example-usage) Section
 ##Expected Input:
 sample.csv
 
