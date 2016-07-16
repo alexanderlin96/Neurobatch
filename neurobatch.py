@@ -91,7 +91,6 @@ def y(x, args):
 		# wait a random period of time between the bounds before downloading (perhaps to avoid IP ban)
 		wait_time = random.randint(args.bounds[0],args.bounds[1]);
 		for i in range(wait_time):
-			print('.', end="",flush=False)
 			time.sleep(1)
 
 		# sets up correct download directory
@@ -142,7 +141,7 @@ def progress_bar():
  
 def main():
 	#parses command line arguments
-	parser = argparse.ArgumentParser(description="Batch Donwloader for http://neurosynth.org Functional Connectivity images")
+	parser = argparse.ArgumentParser(description="Batch Downloader and Link Extractor for http://neurosynth.org\nGitHub: https://github.com/alexanderlin96/Neurobatch\n", formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument("-i", dest="inputcsv", required=True, help="csv file path", metavar="FILE", type=lambda x: is_valid_csv_file(parser, x))
 	parser.add_argument("-o", dest="outputfolder", help="output folder path", metavar="FILE", type=lambda x: directory_exists(parser, x))
 	parser.add_argument("-s", action="store_true", help="set flag to skip link collection")
@@ -156,6 +155,8 @@ def main():
 
 	# checks for correct flag sets
 	if(args.outputfolder is not None):
+		if(not args.outputfolder.endswith('/')):
+			parser.error("incorrect outputfolder format")
 		if(args.bounds[0] is None):
 			parser.error("-w needs to be set")
 
@@ -164,6 +165,8 @@ def main():
 			parser.error("-o needs to be set")
 		elif(args.bounds is None):
 			parser.error("-w needs to be set")
+		if(not args.outputfolder.endswith('/')):
+			parser.error("incorrect outputfolder format")
 
 	# get bounds
 	lowerbound = args.bounds[0]
