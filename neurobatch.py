@@ -10,6 +10,7 @@ import json
 import sys
 import argparse
 import os
+import logging
 
 # dictionary to store all coordinates and their download links 
 mydict={}
@@ -52,7 +53,7 @@ def f(x):
 	while(not success):
 		try: r1 = urllib.request.urlopen(path)
 		except urllib.error.URLError as e:
-			print(e.reason) 
+			logging.exception(e.reason)
 			continue;
 		# parse response json
 		parsed_json = json.loads(r1.read().decode());
@@ -104,7 +105,7 @@ def y(x, args):
 		# attempt to download the functional connectivity file
 		try: urllib.request.URLopener().retrieve(fc_download_link, filename)
 		except urllib.error.URLError as e:
-			print(e.reason)
+			logging.exception(e.reason)
 			continue; 
 
 		success_inner = True;
@@ -153,6 +154,8 @@ def main():
 	global progress
 	global collecting_info
 
+	logging.basicConfig(filename='neurobatch.log',level=logging.DEBUG)
+
 	# checks for correct flag sets
 	if(args.outputfolder is not None):
 		if(not args.outputfolder.endswith('/')):
@@ -167,10 +170,6 @@ def main():
 			parser.error("-w needs to be set")
 		if(not args.outputfolder.endswith('/')):
 			parser.error("incorrect outputfolder format")
-
-	# get bounds
-	lowerbound = args.bounds[0]
-	upperbound = args.bounds[1]
 
 	# sets number of threads
 	workers = 1
@@ -188,10 +187,8 @@ def main():
 		    is_y = int(elem[1])
 		    is_z = int(elem[2])
 		except (IndexError, ValueError) as e:
-			parser.error("This csv file doesn't seem to be valid...")
+			parser.error("This csv file doesn't seem to be valid..")
 
-		if(not (is_x and is_y and is_z)):
-			parser.error("This csv file doesn't seem to be valid...")
 		total += 1
 		mydict[count] = elem
 	f1.close();
@@ -218,7 +215,7 @@ def main():
 			futures = [executor.submit(f, key) for key in mydict.keys()]
 			for future in as_completed(futures):
 				if(future.exception() is not None):
-					print(future.exception());
+					logging.exception(future.exception());
 				else:
 					write_to_csv(csv_writer,future.result())
 
@@ -255,7 +252,7 @@ def main():
 		futures = [executor.submit(y, key, args) for key in mydict.keys()]
 		for future in as_completed(futures):
 			if(future.exception() is not None):
-				print(future.exception());
+				logging.exception(future.exception());
 
 	collecting_info = False			
 	sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
