@@ -46,7 +46,7 @@ This usage only extracts download links and saves them in the input csv file. Th
 ````
 neurobatch.py -a 10 -i sample.csv -o output/ -w 2 6
 ````
-Setting the `-a` flag unleashes the power of multithreading for the batch download process. Downloads will now be handled with the set number of threads. The number of threads signifies how many files will be downloaded asynchronously. Note that each thread will have its own individual wait time. The `-w` does not guarantee non-overlapping, sequential download requests.
+Setting the `-a` flag unleashes the power of multithreading for the batch download process. Downloads will now be handled with the set number of threads. The number of threads signifies how many files will be downloaded asynchronously. Note that each thread will have its own individual wait time. The `-w` does not guarantee non-overlapping, sequential download requests. Not setting the `-a` flag will run the script with the default 1 thread.
 ````
 neurobatch.py -a 10 -s -i sample.csv -o output/ -w 2 6
 ````
