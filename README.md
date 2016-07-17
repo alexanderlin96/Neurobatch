@@ -17,9 +17,10 @@ optional arguments:
   -a WORKERS  multithread mode, if not set default: 1
   -w SEC SEC  random wait time lower and upper bounds inclusive
 ````
+the usage of the flags are explained in the [Example Usage](#example-usage) Section
+
 **IMPORTANT** This script doesn't check if the system has enough memory. Each Functional Connectivity file is 1.1 MB large. Before running the script, take into account how much memory is needed
 
-the usage of the flags are explained in the [Example Usage](#example-usage) Section
 ##Expected Input:
 sample.csv
 
