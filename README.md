@@ -19,7 +19,9 @@ optional arguments:
 ````
 the usage of the flags are explained in the [Example Usage](#example-usage) Section
 
-**IMPORTANT** This script doesn't check if the system has enough memory. Each Functional Connectivity file is 1.1 MB large. Before running the script, take into account how much memory is needed
+**IMPORTANT** This script doesn't check if the system has enough memory. Each Functional Connectivity file is 1.1 MB large. Before running the script, take into account how much memory is needed.
+
+After running the script, your input csv file will have Functional Connectivity download links in column 4 and Meta-analytic Coactivation download links in column 5.
 
 ##Expected Input:
 sample.csv
@@ -37,7 +39,7 @@ sample.csv
 ````
 neurobatch.py -i sample.csv -o output/ -w 2 6
 ````
-This is the most basic usage one thread will collect all download links and save them in the input csv (`sample.csv` in this case) and will attempt to download all "Functional Connectivity" files. The `-w` flag must be set when the `-o` flag is set to denote delay time between downloads. During file downloads, a random wait time between the two numbers inputted will be chosen. Set `-w 0 0` if no delay time is wanted
+This is the most basic usage one thread will collect all download links and save them in the input csv (`sample.csv` in this case) and will attempt to download all "Functional Connectivity" files. The `-w` flag must be set when the `-o` flag is set to denote delay time between downloads. During file downloads, a random wait time between the two numbers inputted will be chosen. Set `-w 0 0` if no delay time is wanted. All files will be saved in the folder set by `-o`.
 ````
 neurobatch.py -i sample.csv
 ````
@@ -50,4 +52,4 @@ Setting the `-a` flag unleashes the power of multithreading for the batch downlo
 ````
 neurobatch.py -a 10 -s -i sample.csv -o output/ -w 2 6
 ````
-Setting the `-s` flag will skip download link extraction and will assume the input csv file will supply the download link in the third column. This command can be ideally used after the second basic command `neurobatch.py -i sample.csv`, which will be the same as the full command `neurobatch.py -a 10 -i sample.csv -o output/ -w 2 6`
+Setting the `-s` flag will skip download link extraction and will assume the input csv file will supply the download link in the 4th column. This command can be ideally used after the second basic command `neurobatch.py -i sample.csv`, which will be the same as the full command `neurobatch.py -a 10 -i sample.csv -o output/ -w 2 6`
