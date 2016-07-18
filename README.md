@@ -1,4 +1,4 @@
-# Neurobatch Alpha Release
+# Neurobatch vAlpha 
 This Python3 script is specific for [neurosynth](http://neurosynth.org/) and allows:
 
 1. Batch extract download links "Functional Connectivity"
