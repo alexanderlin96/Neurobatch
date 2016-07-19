@@ -216,6 +216,9 @@ def main():
 		# start the progress bar
 		progress_bar()
 
+		# start timing function
+		start = time.time()
+
 		# download primary json files
 		with ThreadPoolExecutor(max_workers=workers) as executor:
 			futures = [executor.submit(f, key) for key in mydict.keys()]
@@ -225,8 +228,12 @@ def main():
 				else:
 					write_to_csv(csv_writer,future.result())
 
+		# stop timing function
+		end = time.time()
+
 		sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
 		sys.stdout.flush()
+		print("Completed in %0.3f s" % (end-start))
 
 		# close the temp csv file
 		f2.close();
@@ -260,6 +267,9 @@ def main():
 		progress = 0
 		progress_bar()
 
+		# start timing function
+		start = time.time()
+
 		# assign download task to each worker
 		with ThreadPoolExecutor(max_workers=workers) as executor:
 			futures = [executor.submit(y, key, args, "fc/") for key in mydict.keys()]
@@ -267,9 +277,13 @@ def main():
 				if(future.exception() is not None):
 					logging.exception(future.exception());
 
+		# stop timing function
+		end = time.time()
+
 		collecting_info = False			
 		sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
 		sys.stdout.flush()
+		print("Completed in %0.3f s" % (end-start))
 		print()
 		print('All functional connectivity files downloaded successfully')
 		print()
@@ -280,6 +294,9 @@ def main():
 		progress = 0
 		progress_bar()
 
+		# start timing function
+		start = time.time()
+
 		# assign download task to each worker
 		with ThreadPoolExecutor(max_workers=workers) as executor:
 			futures = [executor.submit(y, key, args, "mc/") for key in mydict.keys()]
@@ -287,9 +304,13 @@ def main():
 				if(future.exception() is not None):
 					logging.exception(future.exception());
 
+		# stop timing function
+		end = time.time()
+
 		collecting_info = False			
 		sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
 		sys.stdout.flush()
+		print("Completed in %0.3f s" % (end-start))
 		print()
 		print('All meta-analytic coactivation files downloaded successfully')
 		print()
