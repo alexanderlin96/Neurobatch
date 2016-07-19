@@ -79,11 +79,15 @@ def f(x):
 		mutex.release()
 	return fields
 
-def y(x, args):
+def y(x, args, tag):
 	x_coor_raw = str(mydict[x][0])
 	y_coor_raw = str(mydict[x][1])
 	z_coor_raw = str(mydict[x][2])
-	fc_download_link = str(mydict[x][3])
+	idx = 3
+	if(tag == "mc/"):
+		idx = 4
+
+	download_link = str(mydict[x][idx])
 
 	# download file until success
 	success_inner = False
@@ -100,10 +104,10 @@ def y(x, args):
 			folder = args.outputfolder;
 
 		# full path of download file
-		filename = folder+x_coor_raw.zfill(2)+'_'+y_coor_raw.zfill(2)+'_'+z_coor_raw.zfill(2)+'.nii.gz'
+		filename = folder+tag+x_coor_raw.zfill(2)+'_'+y_coor_raw.zfill(2)+'_'+z_coor_raw.zfill(2)+'.nii.gz'
 		
 		# attempt to download the functional connectivity file
-		try: urllib.request.URLopener().retrieve(fc_download_link, filename)
+		try: urllib.request.URLopener().retrieve(download_link, filename)
 		except urllib.error.URLError as e:
 			logging.exception(e.reason)
 			continue; 
@@ -146,6 +150,8 @@ def main():
 	parser.add_argument("-i", dest="inputcsv", required=True, help="csv file path", metavar="FILE", type=lambda x: is_valid_csv_file(parser, x))
 	parser.add_argument("-o", dest="outputfolder", help="output folder path", metavar="FILE", type=lambda x: directory_exists(parser, x))
 	parser.add_argument("-s", action="store_true", help="set flag to skip link collection")
+	parser.add_argument("-f", action="store_true", help="download functional connectivity")
+	parser.add_argument("-m", action="store_true", help="download meta-analytic coactivation")
 	parser.add_argument("-a", dest="workers", required=False, help="multithread mode, if not set default: 1", type=int);
 	parser.add_argument("-w", dest="bounds", nargs=2, metavar="SEC", type=int, help="random wait time lower and upper bounds inclusive");
 	args = parser.parse_args()
@@ -163,7 +169,7 @@ def main():
 		if(args.bounds[0] is None):
 			parser.error("-w needs to be set")
 
-	if(args.s):
+	if(args.s or args.m or args.f):
 		if(args.outputfolder is None):
 			parser.error("-o needs to be set")
 		elif(args.bounds is None):
@@ -240,25 +246,53 @@ def main():
 	elif(args.outputfolder != '' and args.outputfolder != None):
 		# makes the folder the files are going to be in
 		os.makedirs(args.outputfolder)
+		if(not(args.f or args.m)):
+			parser.error("please supple a -f or -m flag in order to download files")
+		if(args.f):
+			os.makedirs(args.outputfolder + "fc")
+		if(args.m):
+			os.makedirs(args.outputfolder + "mc")
 
-	# reset settings and initiate file downloads
-	print('Initiating '+ str(total) +' File Downloads with '+str(workers)+' worker(s)')
-	collecting_info = True
-	progress = 0
-	progress_bar()
+	if(args.f):
+		# reset settings and initiate file downloads
+		print('Downloading '+ str(total) +' Functional Connectivity files with '+str(workers)+' worker(s)')
+		collecting_info = True
+		progress = 0
+		progress_bar()
 
-	# assign download task to each worker
-	with ThreadPoolExecutor(max_workers=workers) as executor:
-		futures = [executor.submit(y, key, args) for key in mydict.keys()]
-		for future in as_completed(futures):
-			if(future.exception() is not None):
-				logging.exception(future.exception());
+		# assign download task to each worker
+		with ThreadPoolExecutor(max_workers=workers) as executor:
+			futures = [executor.submit(y, key, args, "fc/") for key in mydict.keys()]
+			for future in as_completed(futures):
+				if(future.exception() is not None):
+					logging.exception(future.exception());
 
-	collecting_info = False			
-	sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
-	sys.stdout.flush()
-	print()
-	print('All files downloaded successfully')
+		collecting_info = False			
+		sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
+		sys.stdout.flush()
+		print()
+		print('All functional connectivity files downloaded successfully')
+		print()
+
+	if(args.m):
+		print('Downloading '+ str(total) +' Meta-analytic Coactivation files with '+str(workers)+' worker(s)')
+		collecting_info = True
+		progress = 0
+		progress_bar()
+
+		# assign download task to each worker
+		with ThreadPoolExecutor(max_workers=workers) as executor:
+			futures = [executor.submit(y, key, args, "mc/") for key in mydict.keys()]
+			for future in as_completed(futures):
+				if(future.exception() is not None):
+					logging.exception(future.exception());
+
+		collecting_info = False			
+		sys.stdout.write('Progress' + ": [" + "#" * 40 + "] 100.00%"  +'\n')
+		sys.stdout.flush()
+		print()
+		print('All meta-analytic coactivation files downloaded successfully')
+		print()
  
 if __name__ == "__main__":
 	main()
