@@ -5,7 +5,8 @@ This Python3 script is specific for [neurosynth](http://neurosynth.org/) and all
 
 1. Batch extract download links "Functional Connectivity"
 2. Batch extract download links "Meta-analytic Coactivation"
-3. Batch download "Functional Connectivity"
+3. Batch download "Functional Connectivity" files
+4. Batch download "Meta-analytic Coactivation" files
 ````
 usage: neurobatch.py [-h] -i FILE [-o FILE] [-s] [-f] [-m] [-a WORKERS] [-w SEC SEC]
 
