@@ -24,7 +24,7 @@ optional arguments:
 ````
 the usage of the flags are explained in the [Example Usage](#example-usage) Section
 
-**IMPORTANT** This script doesn't check if the system has enough memory. Each Functional Connectivity file is 1.1 MB large. Before running the script, take into account how much memory is needed.
+**IMPORTANT** This script doesn't check if the system has enough memory. Each Functional Connectivity file is 1.1 MB large and each Meta-analytic Coactivation file is variable. Before running the script, take into account how much memory is needed to avoid errors.
 
 After running the script, your input csv file will have Functional Connectivity download links in column 4 and Meta-analytic Coactivation download links in column 5.
 
@@ -51,10 +51,10 @@ instead of the regular `python` command which is seen below
 ````
 python neurobatch.py -f -m -i sample.csv -o output/ -w 2 6
 ````
-This is the most basic usage one thread will collect all download links and save them in the input csv (`sample.csv` in this case) and will attempt to download all "Functional Connectivity" files. The `-w` flag must be set when the `-o` flag is set to denote delay time between downloads. During file downloads, a random wait time between the two numbers inputted will be chosen. Set `-w 0 0` if no delay time is wanted. All files will be saved in the folder set by `-o`.
+This is the most basic usage one thread will collect all download links and save them in the input csv (`sample.csv` in this case). Setting the `-f` flag will trigger the script's functional connectivity file download function, and the `-m` flag will trigger the script's meta-analytic coactivation file download function. Both can be set at the same time to trigger both file downloads. The `-w` flag must be set when the `-o` flag is set to denote delay time between downloads. During file downloads, a random wait time between the two numbers inputted will be chosen. Set `-w 0 0` if no delay time is wanted. All functional connectivity files and meta-analytic coactivation files will be saved in a subdirectory named `fc` and `mc` respectively in the directory set by `-o`.
 
 ````
-python neurobatch.py -f -m -i sample.csv
+python neurobatch.py -i sample.csv
 ````
 This usage only extracts download links and saves them in the input csv file. The `-w` tag will be ignored.
 ###Advance:
