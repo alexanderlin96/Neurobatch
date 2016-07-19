@@ -202,7 +202,7 @@ def main():
 	print()
 
 	if(not args.s):
-		print('Collecting Download Links')
+		print('Collecting '+str(total)+' Download Links')
 		# open temporary file to save download links
 		f2 = open('tmp_'+args.inputcsv, 'a')
 		csv_writer = csv.writer(f2);
@@ -242,7 +242,7 @@ def main():
 		os.makedirs(args.outputfolder)
 
 	# reset settings and initiate file downloads
-	print('Initiating File Downloads with '+str(workers)+' worker(s)')
+	print('Initiating '+ str(total) +' File Downloads with '+str(workers)+' worker(s)')
 	collecting_info = True
 	progress = 0
 	progress_bar()
