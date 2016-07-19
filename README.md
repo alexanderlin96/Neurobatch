@@ -1,4 +1,4 @@
-# Neurobatch v1.0
+# Neurobatch v1.1
 Alpha Release
 
 This Python3 script is specific for [neurosynth](http://neurosynth.org/) and allows:
