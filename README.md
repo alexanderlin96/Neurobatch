@@ -11,7 +11,7 @@ This Python3 script is specific for [neurosynth](http://neurosynth.org/) and all
 usage: neurobatch.py [-h] -i FILE [-o FILE] [-s] [-f] [-m] [-a WORKERS] [-w SEC SEC]
 
 Batch Downloader and Link Extractor for http://neurosynth.org
-GitHub: https://github.com/alexanderlin96/Neurobatch
+GitHub: https://github.com/alin96/Neurobatch
 
 optional arguments:
   -h, --help  show this help message and exit
