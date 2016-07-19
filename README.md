@@ -29,6 +29,9 @@ the usage of the flags are explained in the [Example Usage](#example-usage) Sect
 
 After running the script, your input csv file will have Functional Connectivity download links in column 4 and Meta-analytic Coactivation download links in column 5.
 
+##Dependencies:
+Download the latest version of [Python 3](https://www.python.org/downloads/)
+
 ##Expected Input:
 sample.csv
 
