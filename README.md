@@ -56,12 +56,12 @@ instead of the regular `python` command which is seen below
 python neurobatch.py -f -m -i sample.csv -o output/ -w 2 6
 ````
 This is the most basic usage one thread will collect all download links and save them in the input csv (`sample.csv` in this case). Setting the `-f` flag will trigger the script's functional connectivity file download function, and the `-m` flag will trigger the script's meta-analytic coactivation file download function. Set either `-f` or `-m` to download only one type or both can be set at the same time to trigger both file download types. The `-w` flag must be set when the `-o` flag is set to denote delay time between downloads. During file downloads, a random wait time between the two numbers inputted will be chosen. Set `-w 0 0` if no delay time is wanted. All functional connectivity files and meta-analytic coactivation files will be saved in a subdirectory named `fc` and `mc` respectively in the directory set by `-o`.
-**NOTE** This method is usually extremely slow. Visit the [Advanced](#advanced) section for details on how to download multiple files simultaneously 
+**NOTE** This method is usually extremely slow. Visit the [Advance](#advanc) section for details on how to download multiple files simultaneously 
 
 ````
 python neurobatch.py -i sample.csv
 ````
-This usage only extracts download links and saves them in the input csv file. The `-w` tag will be ignored. This script command is ideally followed by the second example under [Advanced](#advanced)
+This usage only extracts download links and saves them in the input csv file. The `-w` tag will be ignored. This script command is ideally followed by the second example under [Advance](#advance)
 ###Advance:
 ````
 python neurobatch.py -a 10 -f -m -i sample.csv -o output/ -w 2 6
