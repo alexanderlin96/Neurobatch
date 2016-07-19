@@ -146,7 +146,7 @@ def progress_bar():
  
 def main():
 	#parses command line arguments
-	parser = argparse.ArgumentParser(description="Batch Downloader and Link Extractor for http://neurosynth.org\nGitHub: https://github.com/alexanderlin96/Neurobatch\n", formatter_class=argparse.RawTextHelpFormatter)
+	parser = argparse.ArgumentParser(description="Batch Downloader and Link Extractor for http://neurosynth.org\nGitHub: https://github.com/alin96/Neurobatch\n", formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument("-i", dest="inputcsv", required=True, help="csv file path", metavar="FILE", type=lambda x: is_valid_csv_file(parser, x))
 	parser.add_argument("-o", dest="outputfolder", help="output folder path", metavar="FILE", type=lambda x: directory_exists(parser, x))
 	parser.add_argument("-s", action="store_true", help="set flag to skip link collection")
