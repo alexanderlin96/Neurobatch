@@ -75,18 +75,20 @@ Setting the `-s` flag will skip download link extraction and will assume the inp
 
 ##Example Output:
 ````
-alin$ python neurobatch.py -a 5 -f -i sample.csv -o output/ -w 2 6
+alin$ python3 neurobatch.py -a 10 -m -i sample.csv -o output/ -w 2 6
 
 Loaded coordinates into Memory
 
 Collecting 11 Download Links
 Progress: [########################################] 100.00%
+Completed in 0.485 s
 
 Done collecting download links
 
-Downloading 11 Functional Connectivity files with 5 worker(s)
+Downloading 11 Meta-analytic Coactivation files with 10 worker(s)
 Progress: [########################################] 100.00%
+Completed in 26.882 s
 
-All functional connectivity files downloaded successfully
+All meta-analytic coactivation files downloaded successfully
 ````
-Setting the `-a 5` will download 5 files concurrently. Setting the `-f` downloads only functional Connectivity files. Setting the `-o output/` will put all files under the a folder in the directory of the script named "output". Setting `-w 2 6` tells each download to wait anywhere from 2 to 6 seconds before downloading the file 
+Setting the `-a 5` will download 5 files concurrently. Setting the `-m` downloads only Meta-analytic Coactivation files. Setting the `-o output/` will put all files under the a folder in the directory of the script named "output". Setting `-w 2 6` tells each download to wait anywhere from 2 to 6 seconds before downloading the file 
