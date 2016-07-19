@@ -57,7 +57,7 @@ This is the most basic usage one thread will collect all download links and save
 ````
 python neurobatch.py -i sample.csv
 ````
-This usage only extracts download links and saves them in the input csv file. The `-w` tag will be ignored.
+This usage only extracts download links and saves them in the input csv file. The `-w` tag will be ignored. This script command is ideally followed by the second example under [Advanced](#advanced)
 ###Advance:
 ````
 python neurobatch.py -a 10 -f -m -i sample.csv -o output/ -w 2 6
