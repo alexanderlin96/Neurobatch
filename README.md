@@ -85,4 +85,4 @@ Progress: [########################################] 100.00%
 
 All functional connectivity files downloaded successfully
 ````
-Setting the `-a 5` will download 5 files concurrently. Setting the `-f` downloads only functional Connectivity files. Setting the `-o output/` will put all files under the a folder in the directory of the script named "output"
+Setting the `-a 5` will download 5 files concurrently. Setting the `-f` downloads only functional Connectivity files. Setting the `-o output/` will put all files under the a folder in the directory of the script named "output". Setting `-w 2 6` tells each download to wait anywhere from 2 to 6 seconds before downloading the file 
