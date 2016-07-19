@@ -68,3 +68,21 @@ Setting the `-a` flag unleashes the power of multithreading for the concurrent b
 python neurobatch.py -f -m -a 5 -s -i sample.csv -o output/ -w 2 6
 ````
 Setting the `-s` flag will skip download link extraction and will assume the input csv file will supply the download link in the 4th column. This command can be ideally used after the second basic command `neurobatch.py -i sample.csv`, which will be the same as the full command `neurobatch.py -a 10 -i sample.csv -o output/ -w 2 6`
+
+##Example Output:
+````
+alin$ python neurobatch.py -a 5 -f -i sample.csv -o output/ -w 2 6
+
+Loaded coordinates into Memory
+
+Collecting 11 Download Links
+Progress: [########################################] 100.00%
+
+Done collecting download links
+
+Downloading 11 Functional Connectivity files with 5 worker(s)
+Progress: [########################################] 100.00%
+
+All functional connectivity files downloaded successfully
+````
+Setting the `-a 5` will download 5 files concurrently. Setting the `-f` downloads only functional Connectivity files. Setting the `-o output/` will put all files under the a folder in the directory of the script named "output"
