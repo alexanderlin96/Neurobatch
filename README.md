@@ -1,15 +1,15 @@
 # Neurobatch v1.1
 Alpha Release
 
+**Note from the Author**
+This script aims to remove the technical aspect of file retrieval for brain research purposes. For those using this too with the purpose to enrich and educate our world,  I hope you find this useful.
+
 This Python3 script is specific for [neurosynth](http://neurosynth.org/) and allows:
 
 1. Batch extract download links "Functional Connectivity"
 2. Batch extract download links "Meta-analytic Coactivation"
 3. Batch download "Functional Connectivity" files
 4. Batch download "Meta-analytic Coactivation" files
-
-**Note from the Author**
-This script aims to remove the technical aspect of file retrieval for brain research purposes. For those using this too with the purpose to enrich and educate our world,  I hope you find this useful.
 
 ````
 usage: neurobatch.py [-h] -i FILE [-o FILE] [-s] [-f] [-m] [-a WORKERS] [-w SEC SEC]
