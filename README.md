@@ -2,7 +2,7 @@
 Alpha Release
 
 **Note from the Author:**
-This script aims to remove the technical aspect of file retrieval from large database from neurosynth. For those using this too with the purpose to enrich and educate our world,  I hope you find this useful and I wish you the best.
+This script aims to remove the technical aspect of file retrieval from large database from neurosynth. For those using this tool with the purpose to enrich and educate our world,  I hope you find this useful and I wish you the best.
 
 This Python3 script is specific for [neurosynth](http://neurosynth.org/) and allows:
 
