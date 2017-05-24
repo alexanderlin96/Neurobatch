@@ -33,10 +33,10 @@ the usage of the flags are explained in the [Example Usage](#example-usage) Sect
 
 After running the script, your input csv file will have Functional Connectivity download links in column 4 and Meta-analytic Coactivation download links in column 5.
 
-##Dependencies:
+## Dependencies:
 Download and install the latest version of [Python 3](https://www.python.org/downloads/)
 
-##Expected Input:
+## Expected Input:
 sample.csv
 
  -56 |14  | 10|
@@ -55,7 +55,7 @@ python3 neurobatch.py -f -m -i sample.csv -o output/ -w 2 6
 ````
 instead of the regular `python` command which is seen below
 
-###Basic:
+### Basic:
 ````
 python neurobatch.py -f -m -i sample.csv -o output/ -w 2 6
 ````
@@ -77,7 +77,7 @@ python neurobatch.py -f -m -a 5 -s -i sample.csv -o output/ -w 2 6
 ````
 Setting the `-s` flag will skip download link extraction and will assume the input csv file will supply the download link in the 4th column. This command can be ideally used after the second basic command `neurobatch.py -i sample.csv`, which will be the same as the full command `neurobatch.py -a 10 -i sample.csv -o output/ -w 2 6`
 
-##Example Output:
+## Example Output:
 ````
 alin$ python3 neurobatch.py -a 10 -m -i sample.csv -o output/ -w 2 6
 
