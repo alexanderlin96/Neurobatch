@@ -47,7 +47,7 @@ sample.csv
 
 **NOTE** that there should not be any headers
 
-##Example Usage:
+## Example Usage:
 **IMPORTANT** for Mac OSx Users:
 After installing Python 3, use `python3` to run the script such as:
 ```
